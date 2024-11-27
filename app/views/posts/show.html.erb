@@ -1,0 +1,39 @@
+<div class="container mt-5">
+  <!-- Post Card -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title"><%= @post.title %></h3>
+      <p class="card-text"><%= @post.content %></p>
+      <p class="card-text"><small>Created by: <%= @post.user.email %> | <%= @post.created_at.strftime("%B %d, %Y") %></small></p>
+
+      <%= link_to 'Edit Post', edit_post_path(@post), class: 'btn btn-outline-warning btn-sm' %>
+      <%= link_to 'Back to Posts', posts_path, class: 'btn btn-outline-secondary btn-sm' %>
+    </div>
+  </div>
+
+  <!-- Comments Section -->
+  <div class="mt-4">
+    <h4>Comments:</h4>
+    <% @post.comments.each do |comment| %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <p><strong class="text-primary" ><%= comment.user.email %>:</strong> <%= comment.content %></p>
+          <p><small>Posted on: <%= comment.created_at.strftime("%B %d, %Y") %></small></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Comment Form -->
+  <div class="mt-4">
+    <h4>Leave a Comment:</h4>
+    <%= form_with(model: [ @post, @post.comments.build ], local: true) do |form| %>
+      <div class="form-group">
+        <%= form.text_area :content, class: 'form-control', rows: 4, placeholder: "Write your comment..." %>
+      </div>
+      <%= form.submit "Post Comment", class: 'btn btn-outline-primary mt-2 btn-sm' %>  |       <%= link_to 'Back to Posts', posts_path, class: 'btn btn-outline-secondary btn-sm mt-2' %>
+
+    <% end %>
+
+  </div>
+</div>

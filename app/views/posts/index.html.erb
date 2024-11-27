@@ -1,0 +1,52 @@
+<%= search_form_for @q, class: 'mb-4' do |f| %>
+  <div class="input-group">
+    <%= f.label :title_cont, "Search by title", class: 'input-group-text' %>
+    <%= f.search_field :title_cont, class: 'form-control' %>
+    <%= f.submit "Search", class: 'btn btn-outline-secondary' %>
+  </div>
+<% end %>
+<div class="row">
+  <% @posts.each do |post| %>
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Title: <%= link_to post.title, post_path(post), class: 'card-link' %></h5>
+          <p class="card-text">Content: <%= truncate(post.content, length: 200) %></p>
+          <p class="card-text"><small class="text-muted">Created by: <%= post.user.email %></small></p>
+          <%= link_to 'View', post_path(post), class: 'btn btn-outline-info btn-sm' %>
+          
+          <% if current_user == post.user %>
+            <%= link_to 'Edit', edit_post_path(post), class: 'btn btn-outline-warning btn-sm' %>
+            <%= link_to 'Delete', post_path(post), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <%# Display pagination controls %>
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <% if @page > 1 %>
+        <li class="page-item">
+          <%= link_to "Previous", posts_path(page: @page - 1), class: "page-link" %>
+        </li>
+      <% end %>
+
+      <% total_pages = (@total_posts / @per_page.to_f).ceil %>
+      <% (1..total_pages).each do |page_number| %>
+        <li class="page-item <%= 'active' if page_number == @page %>">
+          <%= link_to page_number, posts_path(page: page_number), class: "page-link" %>
+        </li>
+      <% end %>
+
+      <% if @page < total_pages %>
+        <li class="page-item">
+          <%= link_to "Next", posts_path(page: @page + 1), class: "page-link" %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+</div>
