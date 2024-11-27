@@ -57,3 +57,4 @@ group :test do
 end
 gem 'devise'
 gem 'ransack'
+gem 'jsbundling-rails'
